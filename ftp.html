@@ -1,0 +1,143 @@
+<!--
+  Copyright 2014 Atsushi Kojo.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="ftp">
+  <div class="form-row">
+    <label for="node-config-input-host"><i class="fa fa-bookmark"></i> Host</label>
+    <input type="text" id="node-config-input-host" placeholder="localhost" style="width: 40%;" />
+    <label for="node-config-input-port" style="margin-left: 10px; width: 35px; "> Port</label>
+    <input type="text" id="node-config-input-port" placeholder="21" style="width:45px">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-user"><i class="fa fa-user"></i> User</label>
+    <input type="text" id="node-config-input-user" placeholder="anonymous" />
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-password"><i class="fa fa-lock"></i> Password</label>
+    <input type="password" id="node-config-input-password">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-connTimeout"><i class="fa fa-clock-o"></i> Connection Timeout</label>
+    <input type="text" id="node-config-input-connTimeout" placeholder="10000">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-pasvTimeout"><i class="fa fa-clock-o"></i> PASV Timeout</label>
+    <input type="text" id="node-config-input-pasvTimeout" placeholder="10000">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-keepalive"><i class="fa fa-clock-o"></i> Keepalive</label>
+    <input type="text" id="node-config-input-keepalive" placeholder="10000">
+  </div>
+  <div class="form-row">
+    <label for="node-input-secure"><i class="fa fa-key"></i> Data connection encryption</label>
+    <input type="checkbox" id="node-input-secure" placeholder="once" style="width: 10%; vertical-align: top;">
+    <label for="node-config-input-secureOptions" style="width: 20%; vertical-align: top;"> Secure Options</label>
+    <input type="text" id="node-config-input-secureOptions" style="width: 35%; vertical-align: top;">
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('ftp', {
+    category: 'config',
+    color:"BurlyWood",
+    defaults: {
+      host: { value: '' },
+      port: { value: '' },
+      secure: { value: false },
+      secureOptions: { value: '' },
+      user: { value: '' },
+      connTimeout: { value: '' },
+      pasvTimeout: { value: '' },
+      keepalive: { value: '' }
+    },
+    credentials: {
+      password: { type: 'password', required: true },
+    },
+    label: function() {
+      return this.host
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="ftp in">
+  <div class="form-row">
+    <label for="node-input-ftp"><i class="fa fa-user"></i> Add new FTP Server</label>
+    <input type="text" id="node-input-ftp">
+  </div>
+  <div class="form-row">
+    <label for="node-input-operation"><i class="fa fa-wrench"></i> Operation</label>
+    <select type="text" id="node-input-operation">
+      <option value="list">list</option>
+      <option value="get">get</option>
+      <option value="put">put</option>
+      <option value="delete">delete</option>
+    </select>
+  </div>
+  <div class="form-row input-filename-row hidden">
+    <label for="node-input-filename"><i class="fa fa-file"></i> Filename</label>
+    <input type="text" id="node-input-filename" placeholder="Filename">
+  </div>
+  <div class="form-row input-localFilename-row hidden">
+    <label for="node-input-localFilename"><i class="fa fa-file"></i> Local Filename</label>
+    <input type="text" id="node-input-localFilename" placeholder="Local Filename">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('ftp in', {
+    category: 'storage-input',
+    color:"BurlyWood",
+    defaults: {
+      ftp: { type: 'ftp', required: true },
+      operation: { value: 'list', required: true },
+      filename: { value: '' },
+      localFilename: { value: '' },
+      name: { value: '' }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "file.png",
+    label: function () {
+      var ftpNode = RED.nodes.node(this.ftp);
+      return this.name || 'ftp';
+    },
+    labelStyle: function () {
+      return this.name ? 'node_label_italic' : '';
+    },
+    oneditprepare: function () {
+      var filename = $(".input-filename-row");
+      var localFilename = $(".input-localFilename-row");
+      $("#node-input-operation").change(function () {
+        var id = $("#node-input-operation option:selected").val();
+        console.log(id);
+        if (id == 'list') {
+          filename.hide();
+          localFilename.hide();
+        } else if (id == 'put') {
+          filename.show();
+          localFilename.show();
+        } else {
+          filename.show();
+          localFilename.hide();
+        }
+      });
+    }
+  });
+</script>
