@@ -11,6 +11,22 @@ Run the following command in the root directory of your Node-RED install
 
     npm install node-red-contrib-ftp
 
+Usage
+-------
+
+This node will allow you to LIST, GET, PUT and DELETE files on a remote FTP server. The GET and PUT options use msg.filename (the path/name of the file on the remote machine) and msg.localFilename (the path/name of the file on the local machine - i.e. the one running NR).
+
+The DELETE option only specifies msg.filename (the path/name of the file on the remote machine)
+The LIST option returns an array of the file/folders in the user's default ftp folder, containing
+type, name, sticky, rights(an object), acl, owner, group, size and date.
+
+Example
+---------
+
+```
+[{"id":"91039113.5ae0b8","type":"debug","z":"e052b363.bcca48","name":"","active":true,"console":"false","complete":"payload","x":494,"y":72,"wires":[]},{"id":"ebf6cb8.83c77b8","type":"inject","z":"e052b363.bcca48","name":"","topic":"","payload":"","payloadType":"none","repeat":"","crontab":"","once":false,"x":114,"y":141,"wires":[["18704d55.fa8d63"]]},{"id":"18704d55.fa8d63","type":"function","z":"e052b363.bcca48","name":"","func":"msg.filename = 'test.csv';\nmsg.localFilename = '/Users/xxx/Desktop/test_remote.csv';\nreturn msg;","outputs":1,"noerr":0,"x":270,"y":141,"wires":[["6f4f3dda.a20a7c"]]},{"id":"6f4f3dda.a20a7c","type":"ftp in","z":"e052b363.bcca48","ftp":"a7676b1a.e9714","operation":"delete","filename":"","localFilename":"","name":"","x":440,"y":143,"wires":[["be82074.47a8878"]]},{"id":"8e30f382.5971f8","type":"inject","z":"e052b363.bcca48","name":"","topic":"","payload":"","payloadType":"none","repeat":"","crontab":"","once":false,"x":108,"y":67,"wires":[["be82074.47a8878"]]},{"id":"be82074.47a8878","type":"ftp in","z":"e052b363.bcca48","ftp":"a7676b1a.e9714","operation":"list","filename":"","localFilename":"","name":"","x":276,"y":68,"wires":[["91039113.5ae0b8"]]},{"id":"a7676b1a.e9714","type":"ftp","z":"","host":"xxx.xxx.xxx.xxx","port":"21","secureOptions":"","user":"username","connTimeout":"","pasvTimeout":"","keepalive":""}]
+```
+
 Acknowledgements
 ----------------
 
