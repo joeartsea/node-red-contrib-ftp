@@ -51,9 +51,9 @@ module.exports = function (RED) {
     this.ftpConfig = RED.nodes.getNode(this.ftp);
 
     if (this.ftpConfig) {
-      var conn = new ftp();
       var node = this;
       node.on('input', function (msg) {
+        var conn = new ftp();
         var filename = node.filename || msg.filename || '';
         var localFilename = node.localFilename || msg.localFilename || '';
         this.sendMsg = function (err, result) {
