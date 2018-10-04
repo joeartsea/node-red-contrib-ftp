@@ -49,6 +49,20 @@
   </div>
 </script>
 
+<script type="text/x-red" data-help-name="ftp in">
+  <p>Allows LIST, GET, PUT and DELETE of files on a remote FTP server.</p>
+  <p><code>msg.filename</code> is the path/name of the file on the remote FTP server</p>
+  <p><code>msg.localFilename</code> is the path/name of the file on the local machine</p>
+  <p>NOTE: the local machine is where NR is running - this might not be the machine where your browser connects to Node Red.</p>
+  <p></p> 
+  <p>GET uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
+  <p>PUT uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
+  <p>DELETE uses only <code>msg.filename</code></p>
+  <p>LIST has no options and returns an array of the file/folders in the user's default ftp folder, containing type, name, sticky, rights(an object), acl, owner, group, size and date.</p>
+  <p></p>
+  <p>You can pass <code>msg.filename</code> and <code>msg.localFilename</code> to this node, however values entered in the node will take precedence.</p>
+</script>
+
 <script type="text/javascript">
   RED.nodes.registerType('ftp', {
     category: 'config',
