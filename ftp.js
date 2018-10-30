@@ -58,8 +58,9 @@ module.exports = function (RED) {
         var localFilename = node.localFilename || msg.localFilename || '';
         this.sendMsg = function (err, result) {
           if (err) {
-            node.error(err.toString());
+            node.error(err, msg);
             node.status({ fill: 'red', shape: 'ring', text: 'failed' });
+            return;
           }
           node.status({});
           if (node.operation == 'get') {
@@ -92,6 +93,11 @@ module.exports = function (RED) {
               conn.delete(filename, node.sendMsg);
               break;
           }
+        });
+        conn.on('error', function(err) { 
+          node.error(err, msg);
+          node.status({ fill: 'red', shape: 'ring', text: err.message });
+          return;
         });
         conn.connect(node.ftpConfig.options);
       });
