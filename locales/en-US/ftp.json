@@ -1,0 +1,27 @@
+{
+    "ftp" : {
+        "label" : {
+            "host" : "Host",
+            "port" : "Port",
+            "user" : "User",
+            "password" : "Password",
+            "connTimeout" : "Connection Timeout",
+            "pasvTimeout" : "PASV Timeout",
+            "keepalive" : "Keepalive",
+            "secure" : "Data connection encryption",
+            "secureOptions" : "Secure Options"
+        }
+    },
+    "ftp_in" : {
+        "label" : {
+            "filename" : "Filename",
+            "localFilename" : "Local Filename",
+            "name" : "Name"
+        },
+        "placeholder" : {
+            "filename" : "Filename",
+            "localFilename" : "Local Filename",
+            "name" : "Name"
+        }
+    }
+}
