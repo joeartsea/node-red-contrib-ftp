@@ -1,0 +1,27 @@
+{
+    "ftp" : {
+        "label" : {
+            "host" : "ホスト",
+            "port" : "ポート",
+            "user" : "ユーザ名",
+            "password" : "パスワード",
+            "connTimeout" : "接続タイムアウト",
+            "pasvTimeout" : "PASVタイムアウト",
+            "keepalive" : "Keepalive",
+            "secure" : "Data connection encryption",
+            "secureOptions" : "Secure Options"
+        }
+    },
+    "ftp_in" : {
+        "label" : {
+            "filename" : "ファイル名",
+            "localFilename" : "ローカルファイル名",
+            "name" : "名前"
+        },
+        "placeholder" : {
+            "filename" : "ファイル名",
+            "localFilename" : "ローカルファイル名",
+            "name" : "名前"
+        }
+    }
+}

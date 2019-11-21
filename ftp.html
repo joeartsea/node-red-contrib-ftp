@@ -16,51 +16,101 @@
 
 <script type="text/x-red" data-template-name="ftp">
   <div class="form-row">
-    <label for="node-config-input-host"><i class="fa fa-bookmark"></i> Host</label>
+    <label for="node-config-input-host"><i class="fa fa-bookmark"></i> <span data-i18n="ftp.label.host"></span></label>
     <input type="text" id="node-config-input-host" placeholder="localhost" style="width: 40%;" />
-    <label for="node-config-input-port" style="margin-left: 10px; width: 35px; "> Port</label>
+    <label for="node-config-input-port" style="margin-left: 10px; width: 35px; "> <span data-i18n="ftp.label.port"></span></label>
     <input type="text" id="node-config-input-port" placeholder="21" style="width:45px">
   </div>
   <div class="form-row">
-    <label for="node-config-input-user"><i class="fa fa-user"></i> User</label>
+    <label for="node-config-input-user"><i class="fa fa-user"></i> <span data-i18n="ftp.label.user"></span></label>
     <input type="text" id="node-config-input-user" placeholder="anonymous" />
   </div>
   <div class="form-row">
-    <label for="node-config-input-password"><i class="fa fa-lock"></i> Password</label>
+    <label for="node-config-input-password"><i class="fa fa-lock"></i> <span data-i18n="ftp.label.password"></span></label>
     <input type="password" id="node-config-input-password">
   </div>
   <div class="form-row">
-    <label for="node-config-input-connTimeout"><i class="fa fa-clock-o"></i> Connection Timeout</label>
+    <label for="node-config-input-connTimeout"><i class="fa fa-clock-o"></i> <span data-i18n="ftp.label.connTimeout"></span></label>
     <input type="text" id="node-config-input-connTimeout" placeholder="10000">
   </div>
   <div class="form-row">
-    <label for="node-config-input-pasvTimeout"><i class="fa fa-clock-o"></i> PASV Timeout</label>
+    <label for="node-config-input-pasvTimeout"><i class="fa fa-clock-o"></i> <span data-i18n="ftp.label.pasvTimeout"></span></label>
     <input type="text" id="node-config-input-pasvTimeout" placeholder="10000">
   </div>
   <div class="form-row">
-    <label for="node-config-input-keepalive"><i class="fa fa-clock-o"></i> Keepalive</label>
+    <label for="node-config-input-keepalive"><i class="fa fa-clock-o"></i> <span data-i18n="ftp.label.keepalive"></span></label>
     <input type="text" id="node-config-input-keepalive" placeholder="10000">
   </div>
   <div class="form-row">
-    <label for="node-input-secure"><i class="fa fa-key"></i> Data connection encryption</label>
+    <label for="node-input-secure"><i class="fa fa-key"></i> <span data-i18n="ftp.label.secure"></span></label>
     <input type="checkbox" id="node-input-secure" placeholder="once" style="width: 10%; vertical-align: top;">
-    <label for="node-config-input-secureOptions" style="width: 20%; vertical-align: top;"> Secure Options</label>
+    <label for="node-config-input-secureOptions" style="width: 20%; vertical-align: top;"> <span data-i18n="ftp.label.secureOptions"></span></label>
     <input type="text" id="node-config-input-secureOptions" style="width: 35%; vertical-align: top;">
   </div>
 </script>
 
+<script type="text/x-red" data-help-name="ftp">
+  <p>Configuration for a connection to an remote FTP server.</p>
+  <p></p>
+  <p><code>Host</code> is The hostname or IP address of the remote FTP server. Default: <code>localhost</code></p>
+  <p><code>Port</code> is The port of the remote FTP server. Default: <code>21</code></p>
+  <p><code>User</code> is Username for authentication. Default: <code>anonymous</code></p>
+  <p><code>Password</code> is Password for authentication. Required input.</p>
+  <p><code>Connection Timeout</code> is How long (in milliseconds) to wait for the control connection to be established. Default: <code>10000</code></p>
+  <p><code>PASV Timeout</code> is How long (in milliseconds) to wait for a PASV data connection to be established. Default: <code>10000</code></p>
+  <p><code>Keepalive</code> is How often (in milliseconds) to send a 'dummy' (NOOP) command to keep the connection alive. Default: <code>10000</code></p>
+  <p><code>Data connection encryption</code> is Set to true for both control and data connection encryption. Default: <code>false</code></p>
+  <p><code>Secure Options</code> is Additional options to be passed to tls.connect(). Default: (none)</p>
+</script>
+
 <script type="text/x-red" data-help-name="ftp in">
   <p>Allows LIST, GET, PUT and DELETE of files on a remote FTP server.</p>
-  <p><code>msg.filename</code> is the path/name of the file on the remote FTP server</p>
-  <p><code>msg.localFilename</code> is the path/name of the file on the local machine</p>
-  <p>NOTE: the local machine is where NR is running - this might not be the machine where your browser connects to Node Red.</p>
-  <p></p> 
-  <p>GET uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
-  <p>PUT uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
-  <p>DELETE uses only <code>msg.filename</code></p>
-  <p>LIST has no options and returns an array of the file/folders in the user's default ftp folder, containing type, name, sticky, rights(an object), acl, owner, group, size and date.</p>
-  <p></p>
-  <p>You can pass <code>msg.filename</code> and <code>msg.localFilename</code> to this node, however values entered in the node will take precedence.</p>
+
+　　<h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">filename
+            <span class="property-type">string</span>
+        </dt>
+        <dd> the path/name of the file on the remote FTP server. </dd>
+        <dt class="optional">localFilename
+            <span class="property-type">string</span></dt>
+        <dd> the path/name of the file on the local machine.</dd>
+    </dl>
+
+  <h3>Outputs</h3>
+     <ol class="node-ports">
+         <li>Standard output (List)
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">array</span></dt>
+                 <dd>array of the file/folders in the user's default ftp folder</dd>
+             </dl>
+         </li>
+         <li>Standard output (Get, Put and Delete)
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">string</span></dt>
+                 <dd>Message that processing is complete.</dd>
+             </dl>
+         </li>
+         <li>Standard error
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">string</span></dt>
+                 <dd>Error message.</dd>
+             </dl>
+         </li>
+     </ol>
+
+  <h3>Details</h3>
+    <p><code>msg.filename</code> is the path/name of the file on the remote FTP server</p>
+    <p><code>msg.localFilename</code> is the path/name of the file on the local machine</p>
+    <p>NOTE: the local machine is where NR is running - this might not be the machine where your browser connects to Node Red.</p>
+    <p></p> 
+    <p>GET uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
+    <p>PUT uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
+    <p>DELETE uses only <code>msg.filename</code></p>
+    <p>LIST has no options and returns an array of the file/folders in the user's default ftp folder, containing type, name, sticky, rights(an object), acl, owner, group, size and date.</p>
+    <p></p>
+    <p>You can pass <code>msg.filename</code> and <code>msg.localFilename</code> to this node, however values entered in the node will take precedence.</p>
+
 </script>
 
 <script type="text/javascript">
@@ -101,16 +151,16 @@
     </select>
   </div>
   <div class="form-row input-filename-row hidden">
-    <label for="node-input-filename"><i class="fa fa-file"></i> Filename</label>
-    <input type="text" id="node-input-filename" placeholder="Filename">
+    <label for="node-input-filename"><i class="fa fa-file"></i> <span data-i18n="ftp_in.label.filename"></span></label>
+    <input type="text" id="node-input-filename" data-i18n="[placeholder]ftp_in.placeholder.filename">
   </div>
   <div class="form-row input-localFilename-row hidden">
-    <label for="node-input-localFilename"><i class="fa fa-file"></i> Local Filename</label>
-    <input type="text" id="node-input-localFilename" placeholder="Local Filename">
+    <label for="node-input-localFilename"><i class="fa fa-file"></i> <span data-i18n="ftp_in.label.localFilename"></span></label>
+    <input type="text" id="node-input-localFilename" data-i18n="[placeholder]ftp_in.placeholder.localFilename">
   </div>
   <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-    <input type="text" id="node-input-name" placeholder="Name">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="ftp_in.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]ftp_in.placeholder.name">
   </div>
 </script>
 
