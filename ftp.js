@@ -70,6 +70,9 @@ module.exports = function (RED) {
           } else if (node.operation == 'put') {
             conn.end();
             msg.payload = 'Put operation successful.';
+          } else if (node.operation == 'mkdir') {
+            conn.end();
+            msg.payload = 'mkdir operation successful.';
           } else {
             conn.end();
             msg.payload = result;
@@ -91,6 +94,9 @@ module.exports = function (RED) {
               break;
             case 'delete':
               conn.delete(filename, node.sendMsg);
+              break;
+            case 'mkdir':
+              conn.mkdir(filename, true, node.sendMsg);
               break;
           }
         });

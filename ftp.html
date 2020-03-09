@@ -64,7 +64,7 @@
 </script>
 
 <script type="text/x-red" data-help-name="ftp in">
-  <p>Allows LIST, GET, PUT and DELETE of files on a remote FTP server.</p>
+  <p>Allows LIST, GET, PUT, DELETE and MKDIR of files on a remote FTP server.</p>
 
 　　<h3>Inputs</h3>
     <dl class="message-properties">
@@ -85,7 +85,7 @@
                  <dd>array of the file/folders in the user's default ftp folder</dd>
              </dl>
          </li>
-         <li>Standard output (Get, Put and Delete)
+         <li>Standard output (Get, Put, Delete and Mkdir)
              <dl class="message-properties">
                  <dt>payload <span class="property-type">string</span></dt>
                  <dd>Message that processing is complete.</dd>
@@ -108,9 +108,9 @@
     <p>PUT uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
     <p>DELETE uses only <code>msg.filename</code></p>
     <p>LIST has no options and returns an array of the file/folders in the user's default ftp folder, containing type, name, sticky, rights(an object), acl, owner, group, size and date.</p>
+    <p>MKDIR uses <code>msg.filename</code> to specify the directory name. Recursive addition is allowed.</p>
     <p></p>
     <p>You can pass <code>msg.filename</code> and <code>msg.localFilename</code> to this node, however values entered in the node will take precedence.</p>
-
 </script>
 
 <script type="text/javascript">
@@ -148,6 +148,7 @@
       <option value="get">get</option>
       <option value="put">put</option>
       <option value="delete">delete</option>
+      <option value="mkdir">mkdir</option>
     </select>
   </div>
   <div class="form-row input-filename-row hidden">
