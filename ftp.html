@@ -64,16 +64,16 @@
 </script>
 
 <script type="text/x-red" data-help-name="ftp in">
-  <p>Allows LIST, GET, PUT and DELETE of files on a remote FTP server.</p>
+  <p>Allows LIST, GET, PUT, APPEND, DELETE and MKDIR of files on a remote FTP server.</p>
 
-　　<h3>Inputs</h3>
+  <h3>Inputs</h3>
     <dl class="message-properties">
         <dt class="optional">filename
             <span class="property-type">string</span>
         </dt>
         <dd> the path/name of the file on the remote FTP server. </dd>
         <dt class="optional">localFilename
-            <span class="property-type">string</span></dt>
+            <span class="property-type">string | buffer</span></dt>
         <dd> the path/name of the file on the local machine.</dd>
     </dl>
 
@@ -85,7 +85,7 @@
                  <dd>array of the file/folders in the user's default ftp folder</dd>
              </dl>
          </li>
-         <li>Standard output (Get, Put and Delete)
+         <li>Standard output (Get, Put, Append, Delete and Mkdir)
              <dl class="message-properties">
                  <dt>payload <span class="property-type">string</span></dt>
                  <dd>Message that processing is complete.</dd>
@@ -101,13 +101,14 @@
 
   <h3>Details</h3>
     <p><code>msg.filename</code> is the path/name of the file on the remote FTP server</p>
-    <p><code>msg.localFilename</code> is the path/name of the file on the local machine</p>
+    <p><code>msg.localFilename</code> is the path/name or buffer of the file on the local machine</p>
     <p>NOTE: the local machine is where NR is running - this might not be the machine where your browser connects to Node Red.</p>
-    <p></p> 
+    <p></p>
     <p>GET uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
     <p>PUT uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
+    <p>APPEND uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
     <p>DELETE uses only <code>msg.filename</code></p>
-    <p>LIST has no options and returns an array of the file/folders in the user's default ftp folder, containing type, name, sticky, rights(an object), acl, owner, group, size and date.</p>
+    <p>LIST uses <code>msg.filename</code>. Returns an array of the file/folders in the user's default ftp folder, containing type, name, sticky, rights(an object), acl, owner, group, size and date.</p>
     <p></p>
     <p>You can pass <code>msg.filename</code> and <code>msg.localFilename</code> to this node, however values entered in the node will take precedence.</p>
 
@@ -147,6 +148,7 @@
       <option value="list">list</option>
       <option value="get">get</option>
       <option value="put">put</option>
+      <option value="append">append</option>
       <option value="delete">delete</option>
     </select>
   </div>
@@ -192,9 +194,9 @@
         var id = $("#node-input-operation option:selected").val();
         console.log(id);
         if (id == 'list') {
-          filename.hide();
+          filename.show();
           localFilename.hide();
-        } else if (id == 'put' || id == 'get') {
+        } else if (id == 'put' || id == 'get' || id == 'append') {
           filename.show();
           localFilename.show();
         } else {

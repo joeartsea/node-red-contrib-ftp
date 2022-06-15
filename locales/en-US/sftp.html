@@ -1,0 +1,81 @@
+<script type="text/x-red" data-help-name="sftp">
+  <p>Configuration for a connection to an remote SFTP server.</p>
+  <p></p>
+  <p><code>Host</code> is The hostname or IP address of the remote SFTP server. Default: <code>localhost</code></p>
+  <p><code>Port</code> is The port of the remote SFTP server. Default: <code>22</code></p>
+  <p><code>Only connect via IPv4 address</code> is checked if you want to only connect via resolved IPv4 address for host. Default: <code>false</code></p>
+  <p><code>Only connect via IPv6 address</code> is checked if you want to only connect via resolved IPv6 address for host. Default: <code>false</code></p>
+  <p><code>User</code> is Username for authentication. Default: <code>anonymous</code></p>
+  <p><code>Password</code> is Password for password-based user authentication. Default: (none)</p>
+  <p><code>privateKey</code> is private key for either key-based or hostbased user authentication. Default: (none)</p>
+  <p><code>passphrase</code> is For an encrypted privateKey, this is the passphrase used to decrypt it. Default: (none)</p>
+  <p><code>agent</code> is Path to ssh-agent's UNIX socket for ssh-agent-based user authentication. Default: (none)</p>
+  <p><code>readyTimeout</code> is How long (in milliseconds) to wait for the SSH handshake to complete. Default: <code>20000</code></p>
+  <p><code>Performs a strict server vendor check</code> is checked if you want to performs a strict server vendor check before sending vendor-specific requests, etc. Default: <code>true</code></p>
+  <p><code>debug</code> is set this to a function that receives a single string argument to get detailed (local) debug information. Default: (none)</p>
+  <p><code>retries</code> is Number of times to retry connecting. Default: <code>2</code></p>
+  <p><code>retry factor</code> is time factor used to calculate time between retries. Default: <code>2</code></p>
+  <p><code>retry minTimeout</code> is Minimum timeout between attempts. Default: <code>2000</code></p>
+</script>
+
+<script type="text/x-red" data-help-name="sftp in">
+  <p>Allows LIST, GET, PUT, APPEND, DELETE and MKDIR of files on a remote SFTP server.</p>
+
+  <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">path
+            <span class="property-type">string</span>
+        </dt>
+        <dd> Remote directory path. </dd>
+        <dt class="optional">pattern
+            <span class="property-type">string | RegExp</span>
+        </dt>
+        <dd> A pattern used to filter the items included in the returned array. </dd>
+        <dt class="optional">filename
+            <span class="property-type">string</span>
+        </dt>
+        <dd> the path/name of the file on the remote SFTP server. </dd>
+        <dt class="optional">localFilename
+            <span class="property-type">string | buffer</span></dt>
+        <dd> the path/name of the file on the local machine.</dd>
+    </dl>
+
+  <h3>Outputs</h3>
+     <ol class="node-ports">
+         <li>Standard output (List)
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">array</span></dt>
+                 <dd>array of the file/folders in the user's default sftp folder</dd>
+             </dl>
+         </li>
+         <li>Standard output (Get, Put, Append, Delete and Mkdir)
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">string</span></dt>
+                 <dd>Message that processing is complete.</dd>
+             </dl>
+         </li>
+         <li>Standard error
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">string</span></dt>
+                 <dd>Error message.</dd>
+             </dl>
+         </li>
+     </ol>
+
+  <h3>Details</h3>
+    <p><code>msg.path</code> is the path of the directory on the remote SFTP server</p>
+    <p><code>msg.pattern</code> is the pattern to be used to narrow down the items in the array to be retrieved</p>
+    <p><code>msg.filename</code> is the path/name of the file on the remote SFTP server</p>
+    <p><code>msg.localFilename</code> is the path/name of the file on the local machine</p>
+    <p>NOTE: the local machine is where NR is running - this might not be the machine where your browser connects to Node Red.</p>
+    <p></p>
+    <p>LIST uses <code>msg.path</code> and <code>msg.pattern</code>. Returns an array of listings in the specified sftp directory, containing type, name, size, modifyTime, accessTime, rights(an object), owner and group.</p>
+    <p>GET uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
+    <p>PUT uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
+    <p>APPEND uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
+    <p>DELETE uses only <code>msg.filename</code></p>
+    <p>MKDIR uses <code>msg.path</code> to specify the directory name. Recursive addition is allowed.</p>
+    <p></p>
+    <p>You can pass <code>msg.path</code>, <code>msg.pattern</code>, <code>msg.filename</code> and <code>msg.localFilename</code> to this node, however values entered in the node will take precedence.</p>
+
+</script>

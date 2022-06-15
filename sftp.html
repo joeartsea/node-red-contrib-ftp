@@ -1,0 +1,252 @@
+<!--
+  Copyright 2014 Atsushi Kojo.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="sftp">
+  <div class="form-row" style="margin-bottom: 0px;">
+    <label for="node-config-input-host"><i class="fa fa-bookmark"></i> <span data-i18n="sftp.label.host"></span></label>
+    <input type="text" id="node-config-input-host" placeholder="localhost" style="width: 40%;" />
+    <label for="node-config-input-port" style="margin-left: 10px; width: 35px; "> <span data-i18n="sftp.label.port"></span></label>
+    <input type="text" id="node-config-input-port" placeholder="22" style="width:45px">
+  </div>
+  <div class="form-row" style="margin-bottom: 0px;">
+    <label>&nbsp;</label>
+    <input type="checkbox" id="node-config-input-forceIPv4" style="display: inline-block; width: auto; vertical-align: top;" />
+    <label for="node-config-input-forceIPv4" style="width:70%;"><span data-i18n="sftp.label.forceIPv4"></span></label>
+  </div>
+  <div class="form-row">
+    <label>&nbsp;</label>
+    <input type="checkbox" id="node-config-input-forceIPv6" style="display: inline-block; width: auto; vertical-align: top;" />
+    <label for="node-config-input-forceIPv6" style="width:70%;"><span data-i18n="sftp.label.forceIPv6"></span></label>
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-username"><i class="fa fa-user"></i> <span data-i18n="sftp.label.username"></span></label>
+    <input type="text" id="node-config-input-username" placeholder="anonymous" />
+  </div>
+  <div class="form-row" style="margin-left: 20px">
+    <label for="node-config-input-password"><i class="fa fa-lock"></i> <span data-i18n="sftp.label.password"></span></label>
+    <input type="password" id="node-config-input-password">
+  </div>
+  <div class="form-row" style="margin-left: 20px">
+    <label for="node-config-input-privateKey"><i class="fa fa-file"></i> <span data-i18n="sftp.label.privateKey"></span></label>
+    <input type="text" id="node-config-input-privateKey" placeholder="/path/to/key">
+  </div>
+  <div class="form-row" style="margin-left: 20px">
+    <label for="node-config-input-passphrase"><i class="fa fa-lock"></i> <span data-i18n="sftp.label.passphrase"></span></label>
+    <input type="password" id="node-config-input-passphrase" data-i18n="[placeholder]sftp.placeholder.passphrase">
+  </div>
+  <div class="form-row" style="margin-left: 20px">
+    <label for="node-config-input-agent"><i class="fa fa-lock"></i> <span data-i18n="sftp.label.agent"></span></label>
+    <input type="text" id="node-config-input-agent">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-readyTimeout"><i class="fa fa-clock-o"></i> <span data-i18n="sftp.label.readyTimeout"></span></label>
+    <input type="text" id="node-config-input-readyTimeout" placeholder="20000">
+  </div>
+  <div class="form-row">
+    <input type="checkbox" id="node-config-input-strictVendor" style="display:inline-block; width:20px; vertical-align:top; margin-right: 5px;" />
+    <label for="node-config-input-strictVendor" style="width:auto" ><span data-i18n="sftp.label.strictVendor"></span></label>
+  </div>
+  <div class="form-row" style="position: relative; margin-bottom: 0px;">
+    <label for="node-config-input-debug-editor"><i class="fa fa-file-code-o"></i> <span data-i18n="sftp.label.debug"></span></label>
+    <input type="hidden" id="node-config-input-debug">
+    <div style="position: absolute; right:0;display:inline-block; text-align: right; font-size: 0.8em;">
+      <button id="node-debug-expand-editor" class="red-ui-button red-ui-button-small"><i class="fa fa-expand"></i></button>
+    </div>
+  </div>
+  <div class="form-row node-text-editor-row">
+    <div style="height: 250px; min-height:70px;" class="node-text-editor" id="node-config-input-debug-editor" ></div>
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-retries" style="width:auto; margin-right:10px"><i class="fa fa-clock-o"></i> <span data-i18n="sftp.label.retries"></span></label>
+    <input type="text" id="node-config-input-retries" style="width:70px" placeholder="2">
+    <label for="node-config-input-retry_factor" style="width:auto; margin-right:10px"><i class="fa fa-clock-o"></i> <span data-i18n="sftp.label.retry_factor"></span></label>
+    <input type="text" id="node-config-input-retry_factor" style="width:70px" placeholder="2">
+    <label for="node-config-input-retry_minTimeout" style="width:auto; margin-right:10px"><i class="fa fa-clock-o"></i> <span data-i18n="sftp.label.retry_minTimeout"></span></label>
+    <input type="text" id="node-config-input-retry_minTimeout" style="width:100px" placeholder="2000">
+  </div>
+
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('sftp', {
+    category: 'config',
+    color:"BurlyWood",
+    defaults: {
+      host: { value: '' },
+      port: { value: '' },
+      forceIPv4: { value: false },
+      forceIPv6: { value: false },
+      username: { value: '' },
+      privateKey: { value: '' },
+      readyTimeout: { value: '' },
+      strictVendor: { value: true },
+      debug: { value: '' },
+      retries: { value: '' },
+      retry_factor: { value: '' },
+      retry_minTimeout: { value: '' }
+    },
+    credentials: {
+      password: { type: 'password' },
+      passphrase: { type: 'password' },
+      agent: { type: 'text' }
+    },
+    label: function() {
+      return this.host
+    },
+    oneditprepare: function() {
+      var that = this;
+      var defaultValue = "// function - Set this to a function that receives a single \n// string argument to get detailed (local) debug information.";
+      this.editor = RED.editor.createEditor({
+        id: 'node-config-input-debug-editor',
+        mode: 'ace/mode/javascript',
+        value: $("#node-config-input-debug").val() || defaultValue
+      });
+      this.editor.focus();
+      RED.popover.tooltip($("#node-debug-expand-editor"), RED._("node-red:common.label.expand"));
+      $("#node-debug-expand-editor").on("click", function(e) {
+        e.preventDefault();
+        var value = that.editor.getValue();
+        RED.editor.editText({
+          mode: 'ace/mode/javascript',
+          value: value,
+          width: "Infinity",
+          cursor: that.editor.getCursorPosition(),
+          complete: function(v,cursor) {
+            that.editor.setValue(v, -1);
+            that.editor.gotoLine(cursor.row+1,cursor.column,false);
+            setTimeout(function() {
+              that.editor.focus();
+            },300);
+          }
+        })
+      });
+    },
+    oneditsave: function() {
+      $("#node-config-input-debug").val(this.editor.getValue());
+      this.editor.destroy();
+      delete this.editor;
+    },
+    oneditcancel: function() {
+      this.editor.destroy();
+      delete this.editor;
+    },
+    oneditresize: function(size) {
+      var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+      var height = $("#dialog-form").height();
+      for (var i=0; i<rows.length; i++) {
+          height -= $(rows[i]).outerHeight(true);
+      }
+      var editorRow = $("#dialog-form>div.node-text-editor-row");
+      height -= (parseInt(editorRow.css("marginTop"))+parseInt(editorRow.css("marginBottom")));
+      $(".node-text-editor").css("height",height+"px");
+      this.editor.resize();
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="sftp in">
+  <div class="form-row">
+    <label for="node-input-sftp"><i class="fa fa-user"></i> Add new SFTP Server</label>
+    <input type="text" id="node-input-sftp">
+  </div>
+  <div class="form-row">
+    <label for="node-input-operation"><i class="fa fa-wrench"></i> Operation</label>
+    <select type="text" id="node-input-operation">
+      <option value="list">list</option>
+      <option value="get">get</option>
+      <option value="put">put</option>
+      <option value="append">append</option>
+      <option value="delete">delete</option>
+      <option value="mkdir">mkdir</option>
+    </select>
+  </div>
+  <div class="form-row input-path-row hidden">
+    <label for="node-input-path"><i class="fa fa-file"></i> <span data-i18n="sftp_in.label.path"></span></label>
+    <input type="text" id="node-input-path" data-i18n="[placeholder]sftp_in.placeholder.path">
+  </div>
+  <div class="form-row input-pattern-row hidden">
+    <label for="node-input-pattern"><i class="fa fa-tag"></i> <span data-i18n="sftp_in.label.pattern"></span></label>
+    <input type="text" id="node-input-pattern" data-i18n="[placeholder]sftp_in.placeholder.pattern">
+  </div>
+  <div class="form-row input-filename-row hidden">
+    <label for="node-input-filename"><i class="fa fa-file"></i> <span data-i18n="sftp_in.label.filename"></span></label>
+    <input type="text" id="node-input-filename" data-i18n="[placeholder]sftp_in.placeholder.filename">
+  </div>
+  <div class="form-row input-localFilename-row hidden">
+    <label for="node-input-localFilename"><i class="fa fa-file"></i> <span data-i18n="sftp_in.label.localFilename"></span></label>
+    <input type="text" id="node-input-localFilename" data-i18n="[placeholder]sftp_in.placeholder.localFilename">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="sftp_in.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]sftp_in.placeholder.name">
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('sftp in', {
+    category: 'storage-input',
+    color:"BurlyWood",
+    defaults: {
+      sftp: { type: 'sftp', required: true },
+      operation: { value: 'list', required: true },
+      path: { value: '' },
+      pattern: { value: '' },
+      filename: { value: '' },
+      localFilename: { value: '' },
+      name: { value: '' }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "file.png",
+    label: function () {
+      var sftpNode = RED.nodes.node(this.sftp);
+      return this.name || 'sftp';
+    },
+    labelStyle: function () {
+      return this.name ? 'node_label_italic' : '';
+    },
+    oneditprepare: function () {
+      var path = $(".input-path-row");
+      var pattern = $(".input-pattern-row");
+      var filename = $(".input-filename-row");
+      var localFilename = $(".input-localFilename-row");
+      $("#node-input-operation").change(function () {
+        var id = $("#node-input-operation option:selected").val();
+        if (id == 'list') {
+          path.show();
+          pattern.show();
+          filename.hide();
+          localFilename.hide();
+        } else if (id == 'put' || id == 'get' || id == 'append') {
+          path.hide();
+          pattern.hide();
+          filename.show();
+          localFilename.show();
+        } else if (id == 'mkdir') {
+          path.show();
+          pattern.hide();
+          filename.hide();
+          localFilename.hide();
+        } else {
+          path.hide();
+          pattern.hide();
+          filename.show();
+          localFilename.hide();
+        }
+      });
+    }
+  });
+</script>

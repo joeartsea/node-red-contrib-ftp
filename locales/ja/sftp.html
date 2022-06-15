@@ -1,0 +1,81 @@
+<script type="text/x-red" data-help-name="sftp">
+  <p>リモートSFTPサーバーへの接続設定</p>
+  <p></p>
+  <p><code>ホスト</code>は、リモートSFTPサーバーのホスト名またはIPアドレスを設定します。 初期値: <code>localhost</code></p>
+  <p><code>ポート</code>は、リモートSFTPサーバーのポート番号を設定します。 初期値: <code>22</code></p>
+  <p><code>IPv4アドレス経由でのみ接続する</code>は、解決されたIPv4アドレスで接続する場合のみチェックします。 初期値: <code>false</code></p>
+  <p><code>IPv6アドレス経由でのみ接続する</code>は、解決されたIPv6アドレスで接続する場合のみチェックします。 初期値: <code>false</code></p>
+  <p><code>ユーザ名</code>は、認証用のユーザー名を設定します。 初期値: <code>anonymous</code></p>
+  <p><code>パスワード</code>は、パスワードによるユーザー認証のためのパスワードを設定します。 初期値: (none)</p>
+  <p><code>秘密鍵</code>は、鍵ベースまたはホストベースのユーザー認証のための秘密鍵を設定します。 初期値: (none)</p>
+  <p><code>パスフレーズ</code>は、暗号化された秘密鍵の場合、それを復号化するためのパスフレーズを設定します。 初期値: (none)</p>
+  <p><code>agent</code>は、ssh-agentベースのユーザー認証の場合、ssh-agentのUNIXソケットへのパスを設定します。 初期値: (none)</p>
+  <p><code>準備完了タイムアウト</code>は、SSHハンドシェイクが完了するまでの待ち時間（ミリ秒）です。 初期値: <code>20000</code></p>
+  <p><code>厳密なサーバーベンダーチェックを実行する</code>は、ベンダー固有のリクエストなどを送信する前に、サーバーのベンダーチェックを厳密に行いたい場合にチェックします。 初期値: <code>true</code></p>
+  <p><code>デバッグ</code>は、これを1つの文字列引数を受け取る関数に設定し、詳細な（ローカルな）デバッグ情報を取得します。 初期値: (none)</p>
+  <p><code>リトライ回数</code>は、接続を再試行する回数を設定します。 初期値: <code>2</code></p>
+  <p><code>リトライ係数</code>は、リトライ間の時間を計算するために使用される時間係数を設定します。 初期値: <code>2</code></p>
+  <p><code>リトライ最小タイムアウト</code>は、試行間隔が最小のタイムアウトを設定します。 初期値: <code>2000</code></p>
+</script>
+
+<script type="text/x-red" data-help-name="sftp in">
+  <p>リモートSFTPサーバー上のファイルのLIST取得、GET、PUT、APPEND、DELETEおよびMKDIRをします。</p>
+
+  <h3>入力</h3>
+    <dl class="message-properties">
+        <dt class="optional">ディレクトリパス
+            <span class="property-type">文字列</span>
+        </dt>
+        <dd> リモートSFTPサーバー上のディレクトリのパス </dd>
+        <dt class="optional">パターン
+            <span class="property-type">文字列 | RegExp</span>
+        </dt>
+        <dd> 取得する配列に含まれる項目を絞り込むために使用するパターン </dd>
+        <dt class="optional">ファイル名
+            <span class="property-type">文字列</span>
+        </dt>
+        <dd> リモートSFTPサーバー上のファイルのパス/名前 </dd>
+        <dt class="optional">ローカルファイル名
+            <span class="property-type">文字列 | バッファ</span></dt>
+        <dd> ローカルマシン上のファイルのパス/名前 </dd>
+    </dl>
+
+  <h3>出力</h3>
+     <ol class="node-ports">
+         <li>標準出力 (List)
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">配列</span></dt>
+                 <dd>指定したsftpディレクトリ内リストの配列</dd>
+             </dl>
+         </li>
+         <li>標準出力 (Get, Put, Append, Delete and Mkdir)
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">文字列</span></dt>
+                 <dd>処理が終了した旨のメッセージ</dd>
+             </dl>
+         </li>
+         <li>エラー出力
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">文字列</span></dt>
+                 <dd>エラーメッセージ</dd>
+             </dl>
+         </li>
+     </ol>
+
+  <h3>詳細</h3>
+    <p><code>msg.path</code>は、リモートSFTPサーバー上のディレクトリのパスを設定します。</p>
+    <p><code>msg.pattern</code>は、取得する配列に含まれる項目を絞り込むために使用するパターンを設定します。</p>
+    <p><code>msg.filename</code>は、リモートSFTPサーバー上のファイルのパス/名前を設定します。</p>
+    <p><code>msg.localFilename</code>は、ローカルマシン上のファイルのパス/名前を設定します。</p>
+    <p>注: ローカルマシンはNRが実行されている場所です - これは、ブラウザがNode Redに接続するマシンではない可能性があります。</p>
+    <p></p>
+    <p>LISTは、<code>msg.path</code>および<code>msg.pattern</code>を使用します。タイプ、名前、サイズ、修正時間、アクセス時間、権限（オブジェクト）、所有者、およびグループを含む、指定したsftpディレクトリ内リストの配列を返します。</p>
+    <p>GETは、<code>msg.filename</code>および<code>msg.localFilename</code>を使用します。</p>
+    <p>PUTは、<code>msg.filename</code>および<code>msg.localFilename</code>を使用します。</p>
+    <p>APPENDは、<code>msg.filename</code>および<code>msg.localFilename</code>を使用します。</p>
+    <p>DELETEは、<code>msg.filename</code>のみ使用します。</p>
+    <p>MKDIRは、<code>msg.path</code>でディレクトリ名を指定します。再帰的な追加も可能です。</p>
+    <p></p>
+    <p><code>msg.path</code>、<code>msg.pattern</code>、<code>msg.filename</code>および<code>msg.localFilename</code>をこのノードに渡すことができますが、ノードに入力された値が優先されます。</p>
+
+</script>
