@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-module.exports = function (RED) {
+ module.exports = function (RED) {
   'use strict';
   var ftp = require('ftp');
   var fs = require('fs');
@@ -56,8 +56,10 @@ module.exports = function (RED) {
         var conn = new ftp();
         var filename = node.filename || msg.filename || '';
         var localFilename = node.localFilename || msg.localFilename || '';
+
         this.sendMsg = function (err, result) {
           if (err) {
+            conn.end();
             node.error(err, msg);
             node.status({ fill: 'red', shape: 'ring', text: 'failed' });
             return;
@@ -70,6 +72,9 @@ module.exports = function (RED) {
           } else if (node.operation == 'put') {
             conn.end();
             msg.payload = 'Put operation successful.';
+          } else if (node.operation == 'append') {
+            conn.end();
+            msg.payload = 'Append operation successful.';
           } else {
             conn.end();
             msg.payload = result;
@@ -81,7 +86,7 @@ module.exports = function (RED) {
         conn.on('ready', function () {
           switch (node.operation) {
             case 'list':
-              conn.list(node.sendMsg);
+              conn.list(filename, node.sendMsg);
               break;
             case 'get':
               conn.get(filename, node.sendMsg);
@@ -89,12 +94,15 @@ module.exports = function (RED) {
             case 'put':
               conn.put(localFilename, filename, node.sendMsg);
               break;
+            case 'append':
+              conn.append(localFilename, filename, node.sendMsg);
+              break;
             case 'delete':
               conn.delete(filename, node.sendMsg);
               break;
           }
         });
-        conn.on('error', function(err) { 
+        conn.on('error', function(err) {
           node.error(err, msg);
           node.status({ fill: 'red', shape: 'ring', text: err.message });
           return;
