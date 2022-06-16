@@ -75,6 +75,9 @@
           } else if (node.operation == 'append') {
             conn.end();
             msg.payload = 'Append operation successful.';
+          } else if (node.operation == 'mkdir') {
+            conn.end();
+            msg.payload = 'mkdir operation successful.';
           } else {
             conn.end();
             msg.payload = result;
@@ -100,7 +103,10 @@
             case 'delete':
               conn.delete(filename, node.sendMsg);
               break;
-          }
+            case 'mkdir':
+              conn.mkdir(filename, true, node.sendMsg);
+              break;
+            }
         });
         conn.on('error', function(err) {
           node.error(err, msg);

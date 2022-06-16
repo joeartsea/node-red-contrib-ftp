@@ -109,6 +109,7 @@
     <p>APPEND uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
     <p>DELETE uses only <code>msg.filename</code></p>
     <p>LIST uses <code>msg.filename</code>. Returns an array of the file/folders in the user's default ftp folder, containing type, name, sticky, rights(an object), acl, owner, group, size and date.</p>
+    <p>MKDIR uses <code>msg.filename</code> to specify the directory name. Recursive addition is allowed.</p>
     <p></p>
     <p>You can pass <code>msg.filename</code> and <code>msg.localFilename</code> to this node, however values entered in the node will take precedence.</p>
 
@@ -150,6 +151,7 @@
       <option value="put">put</option>
       <option value="append">append</option>
       <option value="delete">delete</option>
+      <option value="mkdir">mkdir</option>
     </select>
   </div>
   <div class="form-row input-filename-row hidden">
