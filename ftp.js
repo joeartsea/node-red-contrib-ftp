@@ -23,6 +23,7 @@
     RED.nodes.createNode(this, n);
     var node = this;
     var credentials = RED.nodes.getCredentials(n.id);
+    this.name = n.name;
     this.options = {
       'host': n.host || 'localhost',
       'port': n.port || 21,

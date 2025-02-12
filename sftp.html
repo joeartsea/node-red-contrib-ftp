@@ -15,6 +15,10 @@
 -->
 
 <script type="text/x-red" data-template-name="sftp">
+  <div class="form-row">
+    <label for="node-config-input-name"><i class="fa fa-tag"></i> <span>Name</span></label>
+    <input type="text" id="node-config-input-name">
+  </div>
   <div class="form-row" style="margin-bottom: 0px;">
     <label for="node-config-input-host"><i class="fa fa-bookmark"></i> <span data-i18n="sftp.label.host"></span></label>
     <input type="text" id="node-config-input-host" placeholder="localhost" style="width: 40%;" />
@@ -85,6 +89,7 @@
     category: 'config',
     color:"BurlyWood",
     defaults: {
+      name: { value: '' },
       host: { value: '' },
       port: { value: '' },
       forceIPv4: { value: false },
@@ -104,7 +109,7 @@
       agent: { type: 'text' }
     },
     label: function() {
-      return this.host
+      return this.name || this.host;
     },
     oneditprepare: function() {
       var that = this;
